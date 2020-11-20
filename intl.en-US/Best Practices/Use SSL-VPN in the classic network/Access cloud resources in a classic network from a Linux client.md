@@ -1,164 +1,160 @@
-# Access cloud resources in a classic network from a Linux client {#concept_qrk_klg_xdb .concept}
+# Access cloud resources in a classic network from a Linux client
 
-This topic describes how to use the SSL-VPN function of a VPN Gateway to access cloud resources deployed in a classic network from a Linux client.
+This topic describes how to configure SSL-VPN on VPN gateways to access cloud resources deployed in a classic network from a Linux client.
 
-Note that if you have configured the SSL-VPN, you only need to complete Step 5.
+If you have already configured an SSL-VPN connection on the Linux client, skip to Step 5 to connect Elastic Compute Service \(ECS\) instances that are deployed in a classic network to a virtual private cloud \(VPC\).
 
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616253605_en-US.png)
+![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616253605_en-US.png)
 
-## Prerequisites {#section_oth_2mg_xdb .section}
+## Prerequisites
 
-Before you begin, the following conditions must be met:
+Before you start, make sure that the following requirements are met:
 
 -   The Linux client can access the Internet.
 
--   A VPC is created and the CIDR block of the VPC is set to 172.16.0.0/12. If you use an existing VPC, the VPC must meet the following conditions:
+-   We recommend that you create a new VPC and set the CIDR block of the VPC to 172.16.0.0/12. If you specify an existing VPC, make sure that the VPC meets the requirements in the following table.
 
-|VPC CIDR block|Description|
-|:-------------|:----------|
-|172.16.0.0/12|The VPC does not have a custom route entry whose destination CIDR block is 10.0.0.0/8. You can view the added route entries on the route table details page of the VPC console.
+|CIDR block of the VPC|Limit|
+|:--------------------|:----|
+|172.16.0.0/12|The VPC does not contain a custom route whose destination CIDR block is 10.0.0.0/8. To view the routes that are configured for the VPC, you can log on to the VPC console and navigate to the route table details page. |
+|192.168.0.0/16|-   The VPC does not contain a custom route whose destination CIDR block is 10.0.0.0/8.
 
- |
-|192.168.0.0/16| -   The VPC does not have a custom route entry whose destination CIDR block is 10.0.0.0/8.
+-   A route is added for each ECS instance in the classic network. The route points 192.168.0.0/16 to the Elastic Network Interface \(ENI\) of the ECS instance. You can add the route by using the provided script. [Download script](http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/attach/58095/cn_zh/1502878832385/route192.zip).
 
--   A route is added to an ECS instance of the classic network and the route is directed from 192.168.0.0/16 to the private NIC. You can [download a script](http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/attach/58095/cn_zh/1502878832385/route192.zip) to add the route.
-
-**Note:** Read the readme file in the script carefully before you run the script.
-
- |
+**Note:** Before you run the script, read the readme file in the downloaded package. |
 
 
-## Step 1: Create a VPN Gateway {#section_sj5_kmg_xdb .section}
+## Step 1: Create a VPN gateway
 
-If you use a classic network, the VPN Gateway purchased in the VPC can also be used in the VPC through the ClassicLink function.
+If the VPN gateway is deployed in a VPC and you want to use the VPN gateway in a classic network, you can create a ClassicLink to connect the VPC and classic network.
 
-To create a VPN Gateway, follow these steps:
+Perform the following operations to create a VPN gateway:
 
 1.  Log on to the [VPC console](https://vpcnext.console.aliyun.com).
 2.  In the left-side navigation pane, choose **VPN** \> **VPN Gateways**.
-3.  On the displayed page, click **Create VPN Gateway**.
-4.  On the purchase page, configure the VPN Gateway and complete the payment. In this example, the VPN Gateway is configured as follows:
-    -   **Region**: Select the region to which the VPN Gateway belongs. In this example, select **China \(Hangzhou\)**.
+3.  On the VPN Gateways page, click **Create VPN Gateway**.
+4.  Set the parameters on the buy page and complete the payment. The VPN gateway in this example is configured based on the following information:
+    -   **Region**: Select the region where you want to deploy the VPN gateway. In this example, China \(Hangzhou\) is selected.
 
-**Note:** The VPN Gateway must be in the same region as the VPC.
+**Note:** Make sure that the VPN gateway and the VPC for which the VPN gateway is created are deployed in the same region.
 
-    -   **VPC**: Select the target VPC.
+    -   **VPC**: Select the VPC for which the VPN gateway is created.
 
-    -   **Peak Bandwidth**: Select a peak bandwidth. The bandwidth is the Internet bandwidth of the VPN Gateway.
+    -   **Bandwidth**: Specify the maximum bandwidth of the VPN gateway. The bandwidth is provided for data transfer over the Internet.
 
-    -   **IPsec-VPN**: Select whether to enable the IPsec-VPN function, which applies to site-to-site connections.
+    -   **IPsec-VPN**: Specify whether to enable IPsec-VPN for the VPN gateway. IPsec-VPN connections are site-to-site connections.
 
-    -   **SSL-VPN**: Select whether to enable the SSL-VPN function. In this example, select **Enable**.
+    -   **SSL-VPN**: Specify whether to enable SSL-VPN for the VPN gateway. In this example, SSL-VPN is enabled.
 
-    -   **SSL Connections**: Select the maximum number of clients to which you want to connect simultaneously.
+    -   **SSL Connections**: Specify the maximum number of concurrent SSL connections that the VPN gateway supports.
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616253606_en-US.png)
+        ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616253606_en-US.png)
 
-5.  Go back to the VPN Gateways page to check the created VPN Gateway.
+5.  Navigate to the VPN Gateways page to view the VPN gateway.
 
-    The initial status of the VPN Gateway is Preparing. The status changes to Normal in about two minutes and then the VPN Gateway is ready to use.
+    After the VPN gateway is created, it is in the Preparing state. The VPN gateway changes to the Normal state after about two minutes. If the state of the VPN gateway is Normal, it indicates that the VPN gateway is initialized and ready for use.
 
-    **Note:** It takes one to five minutes to create a VPN Gateway.
+    **Note:** It takes about one to five minutes to create a VPN gateway.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616273607_en-US.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616273607_en-US.png)
 
 
-## Step 2: Create an SSL server {#section_v4f_2mg_xdb .section}
+## Step 2: Create an SSL server
 
-To create an SSL server, follow these steps:
+Perform the following operations to create an SSL server:
 
-1.  In the left-side navigation pane, choose**VPN** \> **SSL Servers**.
-2.  Click **Create SSL Server**. In this example, the SSL server is configured as follows:
+1.  In the left-side navigation pane, choose **VPN** \> **SSL Servers**.
+2.  Click **Create SSL Server**. The SSL server in this example is configured based on the following information:
     -   **Name**: Enter a name for the SSL server.
 
-    -   **VPN Gateway**: Select the VPN Gateway created in Step 1.
+    -   **VPN Gateway**: Select the VPN gateway that you created in Step 1 from the drop-down list.
 
-    -   **Local Network**: **Enter the intranet CIDR block of the ECS instance in the target classic network**. Click **Add Local Network** to add more intranet CIDR blocks.
+    -   **Local Network**: Enter the private CIDR block of the ECS instance that is deployed in the classic network that you want to access. Click **Add Local Network** to add more CIDR blocks.
 
-        In this example, the intranet CIDR blocks are 10.1.0.0/16 and 10.2.0.0/16.
+        In this example, 10.1.0.0/16 and 10.2.0.0/16 are added.
 
-        **Note:** If the IP address of the newly created ECS instance is not in the intranet CIDR blocks, you must add the corresponding intranet CIDR block.
+        **Note:** If the IP address of the ECS instance does not fall within the added private CIDR blocks, you must add the private CIDR block to which the IP address of the ECS instance belongs.
 
-    -   **Client Subnet**: **Enter the IP address used to interconnect the client and the server in the format of CIDR block. The client CIDR block must be a subnet of the CIDR block of the VPC to which the VPN Gateway belongs.**
+    -   **Client CIDR Block**: Enter the CIDR block that is used by the client to connect to the SSL server. The client CIDR block must fall within the CIDR block of the VPC to which the VPN gateway belongs.
 
         In this example, the client CIDR block is 172.16.10.0/24.
 
-        **Note:** The client CIDR block is not the existing IP address of your local client, but the IP address that is assigned to the client for access through SSL VPN.
+        **Note:** The client CIDR block does not refer to the CIDR block of the client. The client CIDR block is used to allocate IP addresses to the client. After the client is assigned an IP address, it can remotely access resources through an SSL-VPN connection.
 
-    -   **Advanced Configuration**: Use the default advanced configuration.
+    -   **Advanced Configuration**: In this example, the default setting is used.
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616313608_en-US.png)
+        ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616313608_en-US.png)
 
 
-## Step 3: Create a client certificate {#section_zw2_24g_xdb .section}
+## Step 3: Create an SSL client certificate
 
-To create a client certificate, follow these steps:
+Perform the following operations to create an SSL client certificate:
 
-1.  In the left-side navigation pane, choose**VPN** \> **SSL Clients** .
+1.  In the left-side navigation pane, choose **VPN** \> **SSL Clients**.
 2.  Click **Create Client Certificate**.
-3.  In the Create Client Certificate dialog box, enter a client certificate name, select the corresponding SSL server, and then click **OK**.
-4.  On the SSL Clients page, find the created client certificate, and then click **Download** to download the client certificate.
+3.  In the Create Client Certificate dialog box, enter a name for the SSL client certificate, select the SSL server to which the SSL client certificate is to be imported, and then click **OK**.
+4.  On the SSL Clients page, find the SSL client certificate that you created, and click **Download** to download the SSL client certificate.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616313609_en-US.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616343609_en-US.png)
 
 
-## Step 4: Configure the client {#section_qdz_j4g_xdb .section}
+## Step 4: Configure the client
 
-To configure the client, follow these steps:
+Perform the following operations to configure the client:
 
-1.  Run the following command to install the OpenVPN client:
+1.  Run the following command to install OpenVPN:
 
-    ``` {#codeblock_jcf_a59_beg}
+    ```
     yum install -y openvpn
     ```
 
-2.  Decompress the certificate downloaded in Step 3 and copy it to the /etc/openvpn/conf/ directory.
-3.  Run the following command to start the OpenVPN client:
+2.  Decompress the client certificate package that you downloaded in Step 3 and copy the SSL client certificate file to the /etc/openvpn/conf/ folder where OpenVPN is installed.
+3.  Run the following command to launch OpenVPN:
 
-    ``` {#codeblock_31o_5mn_h6h}
+    ```
     openvpn --config /etc/openvpn/conf/config.ovpn –daemon
     ```
 
 
-## Step 5: Establish a ClassicLink connection {#section_sk4_n4g_xdb .section}
+## Step 5: Establish a ClassicLink
 
-To establish a ClassicLink connection, follow these steps:
+Perform the following operations to establish a ClassicLink:
 
 1.  Log on to the VPC console.
-2.  Select the region to which the target VPC belongs, and then click the ID of the target VPC.
+2.  Select the region where the VPC is deployed and click the ID of the VPC.
 3.  On the VPC Details page, click **Enable ClassicLink**.
-4.  In the displayed dialog box, click **OK**.
+4.  In the message that appears, click **OK**.
 5.  Log on to the ECS console.
 6.  In the left-side navigation pane, click **Instances**.
-7.  Select one or more ECS instances in the target classic network, and choose**More** \> **Connect to VPC** .
+7.  Select one or more ECS instances deployed in the classic network that you want to access, and choose **More** \> **Connect to VPC**.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616323610_en-US.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616353610_en-US.png)
 
-8.  In the displayed dialog box, select the target VPC, and then click **OK**.
-9.  In the left-side navigation pane, choose**Network & Security** \> **Security Groups** .
-10. On the Security Groups page, click the **Internal Network Ingress** tab, and then click **Add Security Group Rule**. Configure the security group rule as follows:
-    -   **Rule Direction**: Select Inbound.
+8.  In the dialog box that appears, specify the VPC to which you want to connect, and click **OK**.
+9.  In the left-side navigation pane, choose **Networks and Security** \> **Security Groups**.
+10. On the Security Groups page, click the **Inbound** tab, and then click **Add Security Group Rule**. Set the following parameters to configure the security group:
+    -   **Rule Direction**: Inbound.
 
-    -   **Action**: Select Allow.
+    -   **Action**: Allow.
 
-    -   **Protocol Type**: Select All.
+    -   **Protocol Type**: All.
 
-    -   **Authorization Type**: Select IPv4 CIDR Block.
+    -   **Authorization Type**: IPv4 CIDR Block.
 
-    -   **Authorization Objects**: Enter the private IP address \(for example, 172.16.3.44/32\) that needs to access the ECS instance through the VPN Gateway.
+    -   **Authorization Object**: Enter the private IP address \(for example, 172.16.3.44/32\) of the client that needs to access the ECS instance through the VPN gateway.
 
-        Run the ifconfig command on the Linux client, and then find the message that is similar to `inet 172.16.10.6 --> 172.16.10.5 netmask 0xffffffff`, where `172.16.10.6` is the IP address of the client \(the authorization object configured for the security group\).
+        Run the ifconfig command on the Linux client, and then find the message that is similar to `inet 172.16.10.6 --> 172.16.10.5 netmask 0xffffffff`. In the message, `172.16.10.6` is the IP address of the client \(the authorization object specified in the security group\).
 
-        **Note:** If you cannot access the ECS instance through the VPN Gateway, the client IP address has changed and you must add a new security group rule.
+        **Note:** If you fail to access the ECS instance through the VPN gateway, it indicates that the client IP address has changed and you must add a new security group rule.
 
-11. Go back to the ECS console, click the Column Filters icon on the right, select **Connection Status** in the displayed dialog box, and then click **OK**.
+11. Go back to the Instances page of the ECS console, and click the Column Filters icon in the upper-right corner. In the dialog box that appears, select **Connection Status** and click **OK**.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616333611_en-US.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616333611_en-US.png)
 
-12. Check the connection status of the ECS instance.
+12. You can view the state of the connection established to the ECS instance.
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/15688616403612_en-US.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/13374/15688616403612_en-US.png)
 
-    After the configuration, you can access the applications deployed in the connected classic network ECS instance from the Linux client.
+    If the connection is in the Connected state, it indicates that you can access the applications on the ECS instance from the Linux client.
 
 
