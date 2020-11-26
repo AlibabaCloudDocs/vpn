@@ -28,16 +28,18 @@
 |--|--|----|---|--|
 |Action|String|是|TagResources|要执行的操作，取值：**TagResources**。 |
 |RegionId|String|是|cn-hangzhou|资源所属的地域ID。 |
-|ResourceId.N|RepeatList|是|vpc-bp16qjewdsunr41m1\*\*\*\*|资源ID，N的取值范围为 1~20。 |
-|ResourceType|String|是|VPC|资源类型定义，取值：
+|ResourceId.N|RepeatList|是|vpc-bp16qjewdsunr41m1\*\*\*\*|资源ID，N的取值范围为**1**~**20**。 |
+|ResourceType|String|是|VPC|资源类型，取值：
 
- -   **VPC**：VPC实例。
+ -   **VPC**：专有网络实例。
 -   **VSWITCH**：交换机实例。
 -   **ROUTETABLE**：路由表实例。
 -   **EIP**：弹性公网IP实例。
--   **VpnGateWay**：VPN网关实例。 |
-|Tag.N.Key|String|否|FinanceDept|资源的标签键。N的取值范围：1~20。一旦传入该值，则不允许为空字符串。最多支持64个字符，必须以字母或中文开头，可包含数字、点号（.）、下划线（\_）和短横线（-），不能以`aliyun`和`acs:`开头，不能包含`http://`或者`https://`。 |
-|Tag.N.Value|String|否|FinanceJoshua|资源的标签值。N的取值范围：1~20。一旦传入该值，可以为空字符串。最多支持128个字符，必须以字母或中文开头，可包含数字、点号（.）、下划线（\_）和短横线（-），不能以`aliyun`和`acs:`开头，不能包含`http://`或者`https://`。 |
+-   **VpnGateWay**：VPN网关实例。
+-   **NATGATEWAY**：NAT网关实例。
+-   **COMMONBANDWIDTHPACKAGE**：共享带宽实例。 |
+|Tag.N.Key|String|否|FinanceDept|资源的标签键。N的取值范围：1~20。一旦传入该值，则不允许为空字符串。最多支持64个字符，必须以字母或中文开头，可包含数字、英文句点（.）、下划线（\_）和短划线（-），不能以`aliyun`和`acs:`开头，不能包含`http://`或者`https://`。 |
+|Tag.N.Value|String|否|FinanceJoshua|资源的标签值。N的取值范围：1~20。一旦传入该值，可以为空字符串。最多支持128个字符，必须以字母或中文开头，可包含数字、英文句点（.）、下划线（\_）和短划线（-），不能以`aliyun`和`acs:`开头，不能包含`http://`或者`https://`。 |
 
 ## 返回数据
 
