@@ -1,10 +1,15 @@
-# Delete an SSL server {#task_clv_qxx_bhb .task}
+# Delete an SSL server
 
 This topic describes how to delete an SSL server.
 
-1.   Log on to the [VPC console](https://partners-intl.aliyun.com/login-required#/vpc). 
-2.   In the left-side navigation pane, click **VPN** \> **SSL Servers**. 
-3.   Select the target region. 
-4.   On theSSL Servers page, find the target SSL server and click **Delete** in the **Actions** column. 
-5.   In the displayed dialog box, click **OK**. 
+1.  Log on to the [VPN gateway console](https://vpc.console.aliyun.com/vpn).
+
+2.  In the left-side navigation pane, choose **VPN** \> **SSL Servers**.
+
+3.  In the top navigation bar, select the region where you want to create the SSL server.
+
+4.  On the SSL Servers page, find the SSL server that you want to delete, and click **Delete** in the **Actions** column.
+
+5.  In the Delete Gateway message, click **OK**.
+
 
