@@ -1,8 +1,8 @@
-# Configuration overview {#concept_plt_lyx_bhb .concept}
+# Configuration overview
 
 This topic describes how to connect a VPC to an on-premises data center through IPsec-VPN.
 
-## Prerequisites {#section_ydx_lkj_dhb .section}
+## Prerequisites
 
 Before creating a site-to-site VPN connection, make sure the following conditions are met:
 
@@ -13,11 +13,11 @@ Before creating a site-to-site VPN connection, make sure the following condition
 -   A static public IP address is configured for the local gateway.
 -   The IP address ranges of the VPC and on-premises data center to be connected do not conflict with each other.
 
-## Procedure {#section_zhr_qkj_dhb .section}
+## Procedure
 
 The following figure shows the procedure of connecting a VPC to an on-premises data center through IPsec-VPN.
 
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13350/156151995540525_en-US.png)
+![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/en-US/8322029951/p40525.png)
 
 1.  Create a VPN Gateway
 
@@ -33,16 +33,16 @@ The following figure shows the procedure of connecting a VPC to an on-premises d
 
 4.  Configure the local gateway
 
-    You need to load the VPN Gateway configurations to the local gateway device. For more information, see [Local CPE configurations](../reseller.en-US/User Guide/Configure IPsec-VPN connections/Configure local gateways/Configure an IPsec-VPN connection through a USG series Next-Generation Firewall device (Huawei).md#).
+    You need to load the VPN Gateway configurations to the local gateway device. For more information, see [Local CPE configurations](/intl.en-US/User Guide/Configure IPsec-VPN connections/Configure local gateways/Load the IPsec-VPN configuration to a Huawei firewall device.md).
 
 5.  Configure the VPN Gateway route
 
-    You need to configure a route in the VPN Gateway and publish it to the VPC route table. For more information, see [VPN Gateway route overview](../reseller.en-US/User Guide/Manage a VPN Gateway/Configure routes of a VPN Gateway/VPN Gateway route overview.md#).
+    You need to configure a route in the VPN Gateway and publish it to the VPC route table. For more information, see [VPN Gateway route overview](/intl.en-US/User Guide/Manage a VPN Gateway/Configure routes of a VPN Gateway/VPN Gateway route overview.md).
 
 6.  Test the connection
 
     Log on to an ECS instance \(without a public IP address\) in the connected VPC. ping the private IP address of a server in the on-premises data center to check whether the connection is established.
 
 
-For more information, see [Establish a connection between a VPC and an on-premises data center](../reseller.en-US/IPsec-VPN Quick Start/Establish a connection between a VPC and an on-premises data center.md#).
+For more information, see [t13351.md\#](/intl.en-US/IPsec-VPN Quick Start/Connect on-premises data centers to VPC networks.md).
 
