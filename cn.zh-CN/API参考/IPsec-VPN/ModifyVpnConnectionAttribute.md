@@ -75,6 +75,10 @@ IkeConfig.IkePfs：第一阶段协商使用的Diffie-Hellman密钥交换算法�
 -   **BgpConfig.LocalAsn**：本端自治系统号。
 -   **BgpConfig.TunnelCidr**：IPsec隧道网段，该网段在169.254.0.0/16内的掩码长度为30的网段。
 -   **LocalBgpIp**：本端Bgp地址，该地址为IPsec隧道网段内的一个IP地址。 |
+|RemoteCaCertificate|String|否|c20ycDI1NnYxIENBIChURVNUIFN\*\*\*\*|国密型VPN网关创建IPsec连接时，对端的CA证书。
+
+ -   对于国密型VPN网关，创建IPsec连接时，此项必填。
+-   对于普通型VPN网关，此项需要为空。 |
 
 ## 返回数据
 
@@ -153,7 +157,7 @@ https://vpc.aliyuncs.com/?Action=ModifyVpnConnectionAttribute
 
 正常返回示例
 
-`XML` 格式
+`XML`格式
 
 ```
 <ModifyVpnConnectionAttributeResponse>
@@ -204,7 +208,7 @@ https://vpc.aliyuncs.com/?Action=ModifyVpnConnectionAttribute
 </ModifyVpnConnectionAttributeResponse>
 ```
 
-`JSON` 格式
+`JSON`格式
 
 ```
 {
@@ -266,6 +270,8 @@ https://vpc.aliyuncs.com/?Action=ModifyVpnConnectionAttribute
 |400|VpnGateway.FinancialLocked|The specified service is financial locked.|该服务已欠费，请您先充值再操作。|
 |400|InvalidName|The name is not valid|该名称格式不合法。|
 |400|QuotaExceeded.PolicyBasedRoute|The maximum number of policy-based routes is exceeded. Existing routes: %s. Routes to be created: %s. Maximum routes: %s.|策略路由条数已达上限，当前已有%s条，本次将创建%s条，上限为%s条。|
+|400|IllegalParam.LocalSubnet|The specified "LocalSubnet" \(%s\) is invalid.|本端网段\(%s\)不合法。|
+|400|IllegalParam.RemoteSubnet|The specified "RemoteSubnet" \(%s\) is invalid.|对端网段\(%s\)不合法。|
 
 访问[错误中心](https://error-center.aliyun.com/status/product/Vpc)查看更多错误码。
 
