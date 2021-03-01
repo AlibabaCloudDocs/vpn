@@ -11,52 +11,72 @@
 |名称|类型|是否必选|示例值|描述|
 |--|--|----|---|--|
 |Action|String|是|ModifyVpnConnectionAttribute|要执行的操作，取值：**ModifyVpnConnectionAttribute**。 |
-|RegionId|String|是|cn-shanghai|IPsec连接所在的地域。
+|RegionId|String|是|cn-shanghai|VPN网关所在的地域ID。
 
  您可以通过调用[DescribeRegions](~~36063~~)接口获取地域ID。 |
 |VpnConnectionId|String|是|vco-bp1bbi27hojx80nck\*\*\*\*|IPsec连接的ID。 |
-|ClientToken|String|否|02fb3da4-130e-11e9-8e44-0016e04115b|用于保证请求的幂等性。
+|ClientToken|String|否|02fb3da4-130\*\*\*\*|用于保证请求的幂等性。
 
  由客户端生成该参数值，要保证在不同请求间唯一，最大值不超过64个ASCII字符。 |
 |Name|String|否|IPsec|IPsec连接的名称。
 
- 长度为2~128个字符，必须以字母或中文开头，可包含数字、点号（.）、下划线（\_）和短横线（-）。但不能以`http://`或`https://`开头。 |
-|LocalSubnet|String|否|1.1.1.0/24,1.1.2.0/24|需要和本地IDC互连的VPC侧的网段，用于第二阶段协商。
+ 长度为2~128个字符，必须以英文字母或中文开头，可包含数字、半角句号（.）、下划线（\_）和短划线（-），但不能以`http://`或`https://`开头。 |
+|LocalSubnet|String|否|10.1.1.0/24,10.1.2.0/24|需要和本地IDC互连的VPC侧的网段，用于第二阶段协商。
 
- 多个网段之间用逗号（,）分隔，例如：192.168.1.0/24,192.168.2.0/24。 |
-|RemoteSubnet|String|否|1.1.1.0/24,1.1.2.0/24|本地IDC的网段，用于第二阶段协商。
+ 多个网段之间用半角逗号（,）分隔，例如：192.168.1.0/24,192.168.2.0/24。 |
+|RemoteSubnet|String|否|10.2.1.0/24,10.2.2.0/24|本地IDC的网段，用于第二阶段协商。
 
- 多个网段之间用逗号（,）分隔，例如：192.168.3.0/24,192.168.4.0/24。 |
+ 多个网段之间用半角逗号（,）分隔，例如：192.168.3.0/24,192.168.4.0/24。 |
 |EffectImmediately|Boolean|否|false|是否删除当前已协商成功的IPsec隧道并重新发起协商。取值：
 
  -   **true**：配置完成后立即进行协商。
 -   **false**（默认值）：当有流量进入时进行协商。 |
 |IkeConfig|String|否|\{"IkeVersion":"ikev1","IkeMode":"main","IkeEncAlg":"aes","IkeAuthAlg":"sha1","IkePfs":"group2","IkeLifetime":86400\}|第一阶段协商的配置信息：
 
- -   **IkeConfig.Psk**：用于IPsec VPN网关与用户网关之间的身份认证。默认情况下会随机生成，也可以手动指定密钥。长度限制为100个字符。
--   **IkeConfig.IkeVersion**：IKE协议的版本。取值：ikev1\|ikev2，默认值：ikev1。
--   **IkeConfig.IkeMode**：IKE V1版本的协商模式。取值：main（主模式）\|aggressive（野蛮模式），默认值：main。
--   **IkeConfig.IkeEncAlg**：第一阶段协商的加密算法，取值：aes\|aes192\|aes256\|des\|3des，默认值：aes。
--   **IkeConfig.IkeAuthAlg**：第一阶段协商的认证算法，取值：md5\|sha1，默认值：sha。
+ -   **Psk**：用于IPsec VPN网关与用户网关之间的身份认证。默认情况下会随机生成，也可以手动指定密钥。长度限制为100个字符。
 
-IkeConfig.IkePfs：第一阶段协商使用的Diffie-Hellman密钥交换算法，取值：group1\|group2\|group5\|group14\|group24，默认值：group2。
+**说明：** 仅普通型VPN网关的IPsec连接支持修改该参数。
 
--   **IkeConfig.IkeLifetime**：第一阶段协商出的SA的生存周期。取值范围为0~86400，单位为秒，默认值：86400。
--   **IkeConfig.LocalIdIPsec**：VPN网关的标识，长度限制为100个字符，默认值为VPN网关的公网IP地址。
--   **IkeConfig.RemoteId**：用户网关的标识，长度限制为100个字符，默认值为用户网关的公网IP地址。 |
+-   **IkeVersion**：IKE协议的版本。取值：**ikev1**或**ikev2**，默认值：**ikev1**。
+-   **IkeMode**：IKE V1版本的协商模式。取值：**main**或**aggressive**，默认值：**main**。
+-   **IkeEncAlg**：第一阶段协商的加密算法。
+    -   对于普通型VPN网关的IPsec连接，该参数取值：**aes**、**aes192**、**aes256**、**des**或**3des**，默认值：**aes**。
+    -   对于国密型VPN网关的IPsec连接，该参数默认值：**sm4**。
+-   **IkeAuthAlg**：第一阶段协商的认证算法。
+    -   对于普通型VPN网关的IPsec连接，该参数取值：**md5**或**sha1**，默认值：**md5**。
+    -   对于国密型VPN网关的IPsec连接，该参数默认值：**sm3**。
+-   **IkePfs**：第一阶段协商使用的Diffie-Hellman密钥交换算法。取值：**group1**、**group2**、**group5**或**group14**，默认值：**group2**。
+
+**说明：** 仅普通型VPN网关的IPsec连接支持修改该参数。
+
+-   **IkeLifetime**：第一阶段协商出的SA的生存周期。取值范围为**0~86400**，单位为秒，默认值：**86400**。
+-   **LocalIdIPsec**：VPN网关的标识。长度限制为100个字符，默认值为VPN网关的公网IP地址。
+
+**说明：** 仅普通型VPN网关的IPsec连接支持修改该参数。
+
+-   **RemoteId**：
+    -   对于普通型VPN网关的IPsec连接，此参数为用户网关的标识。长度限制为100个字符，默认值为用户网关的公网IP地址。
+    -   对于国密型VPN网关的IPsec连接，此参数为对端CA证书的主体名称。例如："RemoteId":"CN=test,OU=test,O=test,C=CHN"。 |
 |IpsecConfig|String|否|\{"IpsecEncAlg":"aes","IpsecAuthAlg":"sha1","IpsecPfs":"group2","IpsecLifetime":86400\}|第二阶段协商的配置信息：
 
- -   **IpsecConfig.IpsecEncAlg**：第二阶段协商的加密算法，取值：aes\|aes192\|aes256\|des\|3des，默认值：aes。
--   **IpsecConfig. IpsecAuthAlg**：第二阶段协商的认证算法，取值：md5\|sha1，默认值：sha1。
--   **IpsecConfig. IpsecPfs**：转发所有协议的报文。第一阶段协商使用的Diffie-Hellman密钥交换算法，取值：group1\|group2\|group5\|group14\|group24，默认值：group2。
--   **IpsecConfig. IpsecLifetime**：第二阶段协商出的SA的生存周期。取值范围为0~86400，单位为秒，默认值：86400。 |
+ -   **IpsecEncAlg**：第二阶段协商的加密算法。
+    -   对于普通型VPN网关的IPsec连接，该参数取值：**aes**、**aes192**、**aes256**、**des**或**3des**，默认值：**aes**。
+    -   对于国密型VPN网关的IPsec连接，该参数默认值：**sm4**。
+-   **IpsecAuthAlg**：第二阶段协商的认证算法。
+    -   对于普通型VPN网关的IPsec连接，该参数取值：**md5**或**sha1**，默认值：**md5**。
+    -   对于国密型VPN网关的IPsec连接，该参数默认值：**sm3**。
+-   **IpsecPfs**：转发所有协议的报文。第二阶段协商使用的Diffie-Hellman密钥交换算法，取值：**group1**、**group2**、**group5**或**group14**，默认值：**group2**。
+
+**说明：** 仅普通型VPN网关的IPsec连接支持修改该参数。
+
+-   **IpsecLifetime**：第二阶段协商出的SA的生存周期。取值范围为**0~86400**，单位为秒，默认值：**86400**。 |
 |HealthCheckConfig|String|否|\{"enable":"true","dip":"192.168.xx.2","sip":"192.168.xx.2","interval":"3","retry":"3"\}|健康检查配置信息：
 
- -   **HealthCheckConfig.enable**：是否开启健康检查，取值：**true\|false**（默认值）。
--   **HealthCheckConfig.dip**：健康检查的目的IP地址。
--   **HealthCheckConfig.sip**：健康检查的源IP地址。
--   **HealthCheckConfig.interval**：健康检查的重试间隔时间，单位是秒。
--   **HealthCheckConfig.retry**：健康检查的重试发包次数。 |
+ -   **enable**：是否开启健康检查，取值：**true**或**false**，默认值：**false**。
+-   **dip**：健康检查的目的IP地址。
+-   **sip**：健康检查的源IP地址。
+-   **interval**：健康检查的重试间隔时间。单位是秒。
+-   **retry**：健康检查的重试发包次数。 |
 |AutoConfigRoute|Boolean|否|true|是否自动发布路由，取值：
 
  -   **true**（默认值）：自动发布。
@@ -71,26 +91,25 @@ IkeConfig.IkePfs：第一阶段协商使用的Diffie-Hellman密钥交换算法�
 -   **false**：不开启NAT穿越功能。 |
 |BgpConfig|String|否|\{"EnableBgp":"true","LocalAsn":"10001","TunnelCidr":"169.254.11.0/30","LocalBgpIp":"169.254.11.1"\}|Bgp的配置信息：
 
- -   **BgpConfig.EnableBgp**：是否开启Bgp功能，取值：**true** \| **false**。
--   **BgpConfig.LocalAsn**：本端自治系统号。
--   **BgpConfig.TunnelCidr**：IPsec隧道网段，该网段在169.254.0.0/16内的掩码长度为30的网段。
+ -   **EnableBgp**：是否开启Bgp功能，取值：**true**或**false**，默认值：**false**。
+-   **LocalAsn**：本端自治系统号。
+-   **TunnelCidr**：IPsec隧道网段，该网段应该是一个在169.254.0.0/16内掩码长度为30的网段。
 -   **LocalBgpIp**：本端Bgp地址，该地址为IPsec隧道网段内的一个IP地址。 |
-|RemoteCaCertificate|String|否|c20ycDI1NnYxIENBIChURVNUIFN\*\*\*\*|国密型VPN网关创建IPsec连接时，对端的CA证书。
+|RemoteCaCertificate|String|否|-----BEGIN CERTIFICATE----- MIIB7zCCAZW\*\*\*\*|对端的CA证书。
 
- -   对于国密型VPN网关，创建IPsec连接时，此项必填。
--   对于普通型VPN网关，此项需要为空。 |
+ **说明：** 仅国密型VPN网关的IPsec连接支持修改该参数。 |
 
 ## 返回数据
 
 |名称|类型|示例值|描述|
 |--|--|---|--|
 |VpnConnectionId|String|vco-bp1bbi27hojx80nck\*\*\*\*|IPsec连接的ID。 |
-|CustomerGatewayId|String|vpn-bp1q8bgx4xnkm2ogj\*\*\*\*|用户网关的ID。 |
+|CustomerGatewayId|String|cgw-bp1hgslrq1afztya\*\*\*\*|用户网关的ID。 |
 |VpnGatewayId|String|vpn-bp1q8bgx4xnkm2ogj\*\*\*\*|VPN网关的ID。 |
 |Name|String|test|IPsec连接的名称。 |
-|LocalSubnet|String|1.1.1.0/24,1.1.2.0/24|VPC侧的网段。 |
-|RemoteSubnet|String|1.1.1.0/24,1.1.2.0/24|本地IDC侧的网段。 |
-|CreateTime|Long|1492753817000|IPsec连接的创建时间。 |
+|LocalSubnet|String|10.1.1.0/24,10.1.2.0/24|VPC侧的网段。 |
+|RemoteSubnet|String|10.2.1.0/24,10.2.2.0/24|本地IDC侧的网段。 |
+|CreateTime|Long|1492753817000|创建IPsec连接的时间戳。 |
 |Description|String|description|IPsec描述信息。 |
 |EffectImmediately|Boolean|false|IPsec连接是否立即生效。
 
@@ -107,28 +126,28 @@ IkeConfig.IkePfs：第一阶段协商使用的Diffie-Hellman密钥交换算法�
 |IkeConfig|Struct| |第一阶段协商的配置。 |
 |IkeAuthAlg|String|sha1|IKE认证算法。 |
 |IkeEncAlg|String|aes|IKE加密算法。 |
-|IkeLifetime|Long|86400|IKE生存时间。 |
+|IkeLifetime|Long|86400|IKE生存时间。单位为秒。 |
 |IkeMode|String|main|IKE模式。 |
 |IkePfs|String|group2|DH分组。 |
 |IkeVersion|String|ikev1|IKE版本。 |
-|LocalId|String|116.xx.xx.64|本端ID，支持FQDN和IP格式，默认为当前选取的VPN网关IP地址。 |
+|LocalId|String|116.XX.XX.64|本端ID，支持FQDN和IP格式，默认为当前选取的VPN网关IP地址。 |
 |Psk|String|pgw6dy7d1i8i\*\*\*\*|预共享密钥。 |
-|RemoteId|String|139.xx.xx.167|对端ID，支持FQDN和IP格式，默认为当前选取的用户网关IP地址。 |
+|RemoteId|String|139.XX.XX.167|对端ID，支持FQDN和IP格式，默认为当前选取的用户网关IP地址。 |
 |IpsecConfig|Struct| |第二阶段协商的配置。 |
-|IpsecAuthAlg|String|sha1|IPsec认证算法，可选sha1和md5。 |
+|IpsecAuthAlg|String|sha1|IPsec认证算法。 |
 |IpsecEncAlg|String|aes|IPsec加密算法。 |
-|IpsecLifetime|Long|86400|IPsec生存时间。 |
+|IpsecLifetime|Long|86400|IPsec生存时间。单位为秒。 |
 |IpsecPfs|String|group2|DH分组。 |
 |RequestId|String|7DB79D0C-5F27-4AB5-995B-79BE55102F90|请求ID。 |
 |VcoHealthCheck|Struct| |健康检查配置。 |
-|Dip|String|1.1.1.xx|目标IP。 |
+|Dip|String|1.XX.XX.1|目标IP地址。 |
 |Enable|String|true|是否开启健康检查。
 
  -   **true**：已开启。
 -   **false**：未开启。 |
-|Interval|Integer|3|健康检查的重试间隔时间，单位是秒。 |
+|Interval|Integer|3|健康检查的重试间隔时间，单位为秒。 |
 |Retry|Integer|1|健康检查的重试发包次数。 |
-|Sip|String|2.2.2.xx|源IP。 |
+|Sip|String|2.XX.XX.2|源IP地址。 |
 |VpnBgpConfig|Struct| |Bgp配置信息。 |
 |EnableBgp|String|true|Bgp的开启状态。
 
@@ -149,7 +168,7 @@ IkeConfig.IkePfs：第一阶段协商使用的Diffie-Hellman密钥交换算法�
 请求示例
 
 ```
-https://vpc.aliyuncs.com/?Action=ModifyVpnConnectionAttribute
+http(s)://[Endpoint]/?Action=ModifyVpnConnectionAttribute
 &RegionId=cn-shanghai
 &VpnConnectionId=vco-bp1bbi27hojx80nck****
 &<公共请求参数>
@@ -187,13 +206,13 @@ https://vpc.aliyuncs.com/?Action=ModifyVpnConnectionAttribute
   <EnableDpd>true</EnableDpd>
   <IkeConfig>
         <IkeAuthAlg>sha1</IkeAuthAlg>
-        <LocalId>8.xx.xx.192</LocalId>
+        <LocalId>8.XX.XX.192</LocalId>
         <IkeEncAlg>aes</IkeEncAlg>
         <IkeVersion>ikev1</IkeVersion>
         <IkeMode>main</IkeMode>
         <IkeLifetime>86400</IkeLifetime>
         <Psk>123456</Psk>
-        <RemoteId>8.xx.xx.146</RemoteId>
+        <RemoteId>8.XX.XX.146</RemoteId>
         <IkePfs>group2</IkePfs>
   </IkeConfig>
   <VpnBgpConfig>
@@ -238,13 +257,13 @@ https://vpc.aliyuncs.com/?Action=ModifyVpnConnectionAttribute
 	"EnableDpd": true,
 	"IkeConfig": {
 		"IkeAuthAlg": "sha1",
-		"LocalId": "8.xx.xx.192",
+		"LocalId": "8.XX.XX.192",
 		"IkeEncAlg": "aes",
 		"IkeVersion": "ikev1",
 		"IkeMode": "main",
 		"IkeLifetime": 86400,
 		"Psk": "123456",
-		"RemoteId": "8.xx.xx.146",
+		"RemoteId": "8.XX.XX.146",
 		"IkePfs": "group2"
 	},
 	"VpnBgpConfig": {
