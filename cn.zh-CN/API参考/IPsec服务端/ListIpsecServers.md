@@ -23,7 +23,7 @@
 |名称|类型|示例值|描述|
 |--|--|---|--|
 |IpsecServers|Array of IpsecServer| |IPsec服务端信息列表。 |
-|ClientIpPool|String|10.XX.XX.0/24|客户端网段，指给客户端虚拟网卡分配访问地址的的地址段。 |
+|ClientIpPool|String|10.XX.XX.0/24|客户端网段，指给客户端虚拟网卡分配访问地址的地址段。 |
 |CreationTime|String|2018-12-03T10:11:55Z|IPsec服务端创建时间。
 
  T表示分隔符，Z表示的是UTC，即世界标准时间。 |
