@@ -13,7 +13,7 @@
 |Action|String|是|CreateSslVpnServer|要执行的操作，取值：**CreateSslVpnServer**。 |
 |ClientIpPool|String|是|192.168.1.0/24|客户端网段。
 
- 是给客户端虚拟网卡分配访问地址的的地址段，不是指客户端已有的内网网段。
+ 是给客户端虚拟网卡分配访问地址的地址段，不是指客户端已有的内网网段。
 
  当客户端通过SSL-VPN连接访问本端时，VPN网关会从指定的客户端网段中分配一个IP地址给客户端使用。
 
