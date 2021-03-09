@@ -15,7 +15,7 @@
 |名称|类型|是否必选|示例值|描述|
 |--|--|----|---|--|
 |Action|String|是|CreateIpsecServer|系统规定参数。取值：**CreateIpsecServer**。 |
-|ClientIpPool|String|是|10.XX.XX.0/24|客户端网段，指给客户端虚拟网卡分配访问地址的的地址段。
+|ClientIpPool|String|是|10.XX.XX.0/24|客户端网段，指给客户端虚拟网卡分配访问地址的地址段。
 
  **说明：** 客户端网段不能和VPC侧网段冲突。 |
 |LocalSubnet|String|是|192.XX.XX.0/24|本端网段，指需要和客户端网段互连的VPC侧的网段。
