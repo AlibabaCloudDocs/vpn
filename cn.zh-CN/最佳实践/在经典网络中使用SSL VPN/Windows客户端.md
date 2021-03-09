@@ -1,43 +1,37 @@
-# Windows客户端 {#concept_qrk_klg_xdb .concept}
+# Windows客户端
 
 本文将介绍如何使用VPN网关的SSL-VPN功能从Windows客户端远程访问部署在经典网络中的云资源。
 
 如果您已经配置了SSL-VPN，您仅需要根据文档中步骤五的步骤将经典网络中的ECS实例连接到VPC即可实现通过SSL-VPN远程接入经典网络的需求。
 
-![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3605_zh-CN.png)
+![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/5491114851/p3605.png)
 
-## 前提条件 {#section_oth_2mg_xdb .section}
+## 前提条件
 
 在开始之前，确保您的环境满足以下条件：
 
 -   客户端能访问Internet。
 
--   使用SSL-VPN功能，需要切换至新控制台，详情参见[新控制台切换](https://help.aliyun.com/document_detail/66173.html?spm=a2c4g.11186623.2.3.KK5rNc)。
-
 -   建议您创建一个新的VPC，并将VPC的网段设置为172.16.0.0/12。如果您选择用已有的VPC，VPC必须满足下表中的约束条件：
 
 |VPC网段|限制|
 |:----|:-|
-|172.16.0.0/12|该VPC中不存在目标网段为10.0.0.0/8的自定义路由条目。您可以在VPC控制台的路由表详情页面查看已添加的路由条目。
-
-|
-|192.168.0.0/16| -   该VPC中不存在目标网段为10.0.0.0/8的自定义路由条目。
+|172.16.0.0/12|该VPC中不存在目标网段为10.0.0.0/8的自定义路由条目。 您可以在VPC控制台的路由表详情页面查看已添加的路由条目。 |
+|192.168.0.0/16|-   该VPC中不存在目标网段为10.0.0.0/8的自定义路由条目。
 
 -   需要在经典网络ECS实例中增加192.168.0.0/16指向私网网卡的路由。您可以使用提供的脚本添加路由，单击[此处](http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/attach/58095/cn_zh/1502878832385/route192.zip)下载路由脚本。
 
-**说明：** 在运行脚本前，请仔细阅读脚本中包含的readme文件。
-
- |
+**说明：** 在运行脚本前，请仔细阅读脚本中包含的readme文件。 |
 
 
-## 步骤一 创建VPN网关 {#section_sj5_kmg_xdb .section}
+## 步骤一：创建VPN网关
 
 如果您是经典网络，在VPC内购买的VPN网关配合ClassicLink功能也可以在经典网络中使用。
 
 完成以下操作，创建VPN网关：
 
-1.  登录新版[VPC管理控制台](https://vpcnext.console.aliyun.com)。
-2.  在左侧导航栏，单击**VPN** \> **VPN网关** 。
+1.  登录[VPC管理控制台](https://vpcnext.console.aliyun.com)。
+2.  在左侧导航栏，选择**VPN** \> **VPN网关** 。
 3.  在VPN网关页面，单击**创建VPN网关**。
 4.  在购买页面，配置VPN网关，完成支付。本操作中VPN网关的配置如下：
     -   **地域**：选择VPN网关的地域。本操作中选择**华东1（杭州）**。
@@ -54,7 +48,7 @@
 
     -   **SSL并发连接数**： 选择您需要同时连接的客户端最大规格。
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3606_zh-CN.png)
+        ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/5491114851/p3606.png)
 
 5.  返回VPN网关页面，查看创建的VPN网关。
 
@@ -62,10 +56,10 @@
 
     **说明：** VPN网关的创建一般需要1-5分钟。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3607_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/5491114851/p3607.png)
 
 
-## 步骤二 创建SSL服务端 {#section_v4f_2mg_xdb .section}
+## 步骤二：创建SSL服务端
 
 完成以下操作，创建SSL服务端：
 
@@ -75,13 +69,13 @@
 
     -   **VPN网关**：选择步骤一中创建的VPN网关。
 
-    -   **本端网段**：**以CIDR地址块的形式输入要连接的经典网络ECS实例的内网网段**。单击**添加本端网段**添加多个本端网段。
+    -   **本端网段**：以CIDR地址块的形式输入要连接的经典网络ECS实例的内网网段。单击**添加本端网段**添加多个本端网段。
 
         在本例中，本端网段为10.1.0.0/16和10.2.0.0/16。
 
         **说明：** 如果新建ECS实例的IP地址不在已配置的本端网段内，需要添加对应的本端网段。
 
-    -   **客户端网段**：**以CIDR地址块的形式输入客户端连接服务端时使用的IP地址。该客户端网段必须是VPN网关所在的VPC的网段的子集。**
+    -   **客户端网段**：以CIDR地址块的形式输入客户端连接服务端时使用的IP地址。该客户端网段必须是VPN网关所在的VPC的网段的子集。
 
         在本例中，客户端网段为172.16.10.0/24。
 
@@ -89,10 +83,10 @@
 
     -   **高级配置**：使用默认高级配置。
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3608_zh-CN.png)
+        ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/6491114851/p3608.png)
 
 
-## 步骤三 创建客户端证书 {#section_zw2_24g_xdb .section}
+## 步骤三：创建客户端证书
 
 完成以下操作，创建客户端证书：
 
@@ -101,10 +95,10 @@
 3.  在创建客户端证书对话框，输入客户端证书名称并选择对应的SSL服务端，然后单击**确定**。
 4.  在SSL客户端页面，找到已创建的客户端证书，然后单击**下载**下载生成的客户端证书。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3609_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/6491114851/p3609.png)
 
 
-## 步骤四 客户端配置 {#section_qdz_j4g_xdb .section}
+## 步骤四：客户端配置
 
 完成以下操作，配置客户端：
 
@@ -112,10 +106,10 @@
 2.  将步骤三中下载的证书解压后复制到OpenVPN安装目录中的config文件夹中。
 3.  单击**Connect**发起连接。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13355/3331_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/0598488951/p3331.png)
 
 
-## 步骤五 建立ClassicLink连接 {#section_sk4_n4g_xdb .section}
+## 步骤五：建立ClassicLink连接
 
 完成以下操作，建立ClassicLink连接：
 
@@ -125,9 +119,9 @@
 4.  在弹出的对话框，单击**确定**。
 5.  登录ECS管理控制台。
 6.  在左侧导航栏，单击**实例**。
-7.  选择一个或多个目标经典网络的ECS实例，单击**更多** \> **连接专有网络** 。
+7.  选择一个或多个目标经典网络的ECS实例，选择**更多** \> **连接专有网络** 。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3610_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/6491114851/p3610.png)
 
 8.  在弹出的对话框中选择目标VPC，单击**确定**。
 9.  在左侧导航栏，单击**网络和安全** \> **安全组** 。
@@ -146,15 +140,15 @@
 
         **说明：** 如果无法通过VPN网关访问ECS实例，可能是客户端IP发生了变化，您需要重新添加安全组规则。
 
-        ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13376/3617_zh-CN.png)
+        ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/7781114851/p3617.png)
 
 11. 返回ECS管理控制台，单击右侧的配置图标，在弹出的对话框中选中**连接状态**，然后单击**确定**。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3611_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/6491114851/p3611.png)
 
 12. 查看ECS实例的连接状态。
 
-    ![](http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/13374/3612_zh-CN.png)
+    ![](https://static-aliyun-doc.oss-accelerate.aliyuncs.com/assets/img/zh-CN/6491114851/p3612.png)
 
     配置完成后，您就可以从Linux客户端访问已连接的经典网络ECS实例中部署的应用了。
 
