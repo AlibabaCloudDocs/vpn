@@ -12,8 +12,6 @@ Before you start, make sure that the following requirements are met:
 
 -   The Windows client can access the Internet.
 
--   To configure SSL-VPN, you must switch to the new console. For more information, see [Switch to the new console](https://help.aliyun.com/document_detail/66173.html?spm=a2c4g.11186623.2.3.KK5rNc).
-
 -   We recommend that you create a new VPC and set the CIDR block of the VPC to 172.16.0.0/12. If you specify an existing VPC, make sure that the VPC meets the requirements in the following table.
 
 |CIDR block of the VPC|Requirement|
